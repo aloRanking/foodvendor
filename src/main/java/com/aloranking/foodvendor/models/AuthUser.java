@@ -29,7 +29,19 @@ public class AuthUser {
     @JoinColumn(name = "vendor_user_id", nullable = true)
     private Vendor vendor;
 
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
+
     public AuthUser() {
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public Vendor getVendor() {

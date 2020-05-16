@@ -2,8 +2,10 @@ package com.aloranking.foodvendor.services;
 
 import com.aloranking.foodvendor.models.AuthUser;
 import com.aloranking.foodvendor.models.Customer;
+import com.aloranking.foodvendor.models.Role;
 import com.aloranking.foodvendor.models.Vendor;
 import com.aloranking.foodvendor.repositories.AuthUserRepository;
+import com.aloranking.foodvendor.repositories.RoleRepository;
 import com.aloranking.foodvendor.repositories.VendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,9 @@ public class VendorServiceImpl implements VendorService {
 
     @Autowired
     private AuthUserRepository authUserRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public Vendor addUser(Vendor vendor, String password) {
@@ -37,8 +42,8 @@ public class VendorServiceImpl implements VendorService {
         authUser.setEmail(email);
         authUser.setPassword(password);
         authUser.setVendor(vendor);
-        //    Role role = roleRepository.findByRole("CUSTOMER");
-        //     authUser.setRoles(role);
+        Role role = roleRepository.findByRole("VENDOR");
+          authUser.setRole(role);
         authUserRepository.save(authUser);
         return authUser;
     }
