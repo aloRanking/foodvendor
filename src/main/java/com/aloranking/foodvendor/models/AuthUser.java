@@ -21,11 +21,23 @@ public class AuthUser {
     private String password;
 
     @OneToOne
-    @JoinColumn(name = "customer_user_id", nullable = false)
+    @JoinColumn(name = "customer_user_id", nullable = true)
     private Customer customer;
 
 
+    @OneToOne
+    @JoinColumn(name = "vendor_user_id", nullable = true)
+    private Vendor vendor;
+
     public AuthUser() {
+    }
+
+    public Vendor getVendor() {
+        return vendor;
+    }
+
+    public void setVendor(Vendor vendor) {
+        this.vendor = vendor;
     }
 
     public Customer getCustomer() {

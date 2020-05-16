@@ -3,9 +3,12 @@ package com.aloranking.foodvendor.controllers;
 import com.aloranking.foodvendor.models.AuthUser;
 import com.aloranking.foodvendor.models.Customer;
 import com.aloranking.foodvendor.models.Password;
+import com.aloranking.foodvendor.models.Vendor;
 import com.aloranking.foodvendor.repositories.AuthUserRepository;
 import com.aloranking.foodvendor.repositories.CustomerRepository;
+import com.aloranking.foodvendor.repositories.VendorRepository;
 import com.aloranking.foodvendor.services.CustomerService;
+import com.aloranking.foodvendor.services.VendorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +25,12 @@ public class AuthorizationController {
 
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private VendorService vendorService;
+
+    @Autowired
+    private VendorRepository vendorRepository;
 
 
     @PostMapping
@@ -65,19 +74,33 @@ public class AuthorizationController {
     @PostMapping
     @RequestMapping("/register/customer")
     public String create(@RequestBody final Customer customer){
-
-
-
         customerRepository.saveAndFlush(customer);
         return "Successfully Register";
 
     }
 
     @PostMapping
-    @RequestMapping("{id}/set-password")
+    @RequestMapping("/register/vendor")
+    public String create(@RequestBody final Vendor vendor){
+         vendorRepository.saveAndFlush(vendor);
+
+        return ("<h1> Successfully Registered </h1>");
+    }
+
+    @PostMapping
+    @RequestMapping("/customer/{id}/set-password")
     public String addUser(@PathVariable("id") Long id, @RequestBody Password password){
         Customer existingCustomer = customerService.getCustomer(id);//.orElseThrow(() -> new UserNotFoundException(id));
         Customer customer = customerService.addUser(existingCustomer, password.getPassword());
+
+        return "Successfully updated";
+    }
+
+    @PostMapping
+    @RequestMapping("vendor/{id}/set-password")
+    public String addVendorUser(@PathVariable("id") Long id, @RequestBody Password password){
+        Vendor existingVendor = vendorService.getVendor(id);//.orElseThrow(() -> new UserNotFoundException(id));
+        Vendor vendor = vendorService.addUser(existingVendor, password.getPassword());
 
         return "Successfully updated";
     }
