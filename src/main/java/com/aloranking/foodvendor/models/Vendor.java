@@ -1,8 +1,11 @@
 package com.aloranking.foodvendor.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Table(name = "vendors")
@@ -26,7 +29,13 @@ public class Vendor {
     private String phoneNumber;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "vendor")
+    @JsonIgnore
     private AuthUser authUser;
+
+    @OneToMany(mappedBy = "vendor")
+    @JsonIgnore
+    private List<Menu> menu;
+
 
 
 

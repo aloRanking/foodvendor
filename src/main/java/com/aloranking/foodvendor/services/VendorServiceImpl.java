@@ -7,6 +7,7 @@ import com.aloranking.foodvendor.repositories.AuthUserRepository;
 import com.aloranking.foodvendor.repositories.RoleRepository;
 import com.aloranking.foodvendor.repositories.VendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,6 +21,9 @@ public class VendorServiceImpl implements VendorService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public Vendor addUser(Vendor vendor, String password) {
@@ -39,7 +43,7 @@ public class VendorServiceImpl implements VendorService {
     public AuthUser createUser(String email, String password, Vendor vendor){
         AuthUser authUser = new AuthUser();
         authUser.setEmail(email);
-        authUser.setPassword(password);
+        authUser.setPassword(passwordEncoder.encode(password));
         authUser.setVendor(vendor);
         Role role = roleRepository.findByRole("VENDOR");
           authUser.setRole(role);

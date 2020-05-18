@@ -1,5 +1,7 @@
 package com.aloranking.foodvendor.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -16,20 +18,21 @@ public class Menu {
     private boolean isRecurring;
     private int freqRecurrence;
 
-    /*@ManyToOne
+    @ManyToOne
     @JoinColumn(name = "vendor_id", nullable = false)
-    private Vendor vendor;*/
+
+    private Vendor vendor;
 
     public Menu() {
     }
 
-    /*public Vendor getVendor() {
+    public Vendor getVendor() {
         return vendor;
     }
 
     public void setVendor(Vendor vendor) {
         this.vendor = vendor;
-    }*/
+    }
 
     public Long getId() {
         return id;

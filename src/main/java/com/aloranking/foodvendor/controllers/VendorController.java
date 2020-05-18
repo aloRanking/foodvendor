@@ -6,10 +6,9 @@ import com.aloranking.foodvendor.repositories.MenuRepository;
 import com.aloranking.foodvendor.repositories.VendorRepository;
 import com.aloranking.foodvendor.services.VendorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class VendorController {
@@ -23,14 +22,21 @@ public class VendorController {
     @Autowired
     private VendorService vendorService;
 
-    /*@PostMapping
-    @RequestMapping("/home/create-menu")
-    public Menu create(@RequestBody Menu menu){
+    @PostMapping
+    @RequestMapping("/home/{id}/create-menu")
+    public Menu createMenu(@PathVariable Long id, @RequestBody Menu menu){
         Vendor existingVendor = vendorService.getVendor(id);
-        men
+        menu.setVendor(existingVendor);
+        return  menuRepository.saveAndFlush(menu);
 
 
-    }*/
+    }
+
+    @GetMapping
+    @RequestMapping("/menus")
+    public List<Menu> list(){
+return menuRepository.findAll();
+    }
 
 
 }
