@@ -8,6 +8,7 @@ import com.aloranking.foodvendor.repositories.AuthUserRepository;
 import com.aloranking.foodvendor.repositories.CustomerRepository;
 import com.aloranking.foodvendor.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,6 +21,9 @@ public class CustomerServiceImpl  implements CustomerService{
     private AuthUserRepository authUserRepository;
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    BCryptPasswordEncoder passwordEncoder;
 
 
     @Override
@@ -55,7 +59,7 @@ public class CustomerServiceImpl  implements CustomerService{
     public AuthUser createUser(String email, String password, Customer customer){
         AuthUser authUser = new AuthUser();
         authUser.setEmail(email);
-        authUser.setPassword(password);
+        authUser.setPassword(passwordEncoder.encode(password));
         authUser.setCustomer(customer);
     Role role = roleRepository.findByRole("CUSTOMER");
      authUser.setRole(role);

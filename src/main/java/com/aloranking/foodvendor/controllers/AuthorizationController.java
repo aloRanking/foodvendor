@@ -57,6 +57,13 @@ public class AuthorizationController {
         return authUserRepository.getOne(id);
     }
 
+    @GetMapping
+    @RequestMapping("/home")
+    public String home(){
+        return ("<h1> Welcome Home</h1>");
+    }
+
+
 
     @GetMapping
     @RequestMapping("/customer/get-all")

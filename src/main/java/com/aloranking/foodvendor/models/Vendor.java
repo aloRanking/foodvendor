@@ -28,6 +28,8 @@ public class Vendor {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "vendor")
     private AuthUser authUser;
 
+
+
     public Vendor() {
     }
 

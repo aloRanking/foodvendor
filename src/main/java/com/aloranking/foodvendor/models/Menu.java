@@ -16,8 +16,20 @@ public class Menu {
     private boolean isRecurring;
     private int freqRecurrence;
 
+    /*@ManyToOne
+    @JoinColumn(name = "vendor_id", nullable = false)
+    private Vendor vendor;*/
+
     public Menu() {
     }
+
+    /*public Vendor getVendor() {
+        return vendor;
+    }
+
+    public void setVendor(Vendor vendor) {
+        this.vendor = vendor;
+    }*/
 
     public Long getId() {
         return id;
