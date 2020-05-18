@@ -1,7 +1,6 @@
 package com.aloranking.foodvendor.services;
 
 import com.aloranking.foodvendor.models.AuthUser;
-import com.aloranking.foodvendor.models.Customer;
 import com.aloranking.foodvendor.models.Role;
 import com.aloranking.foodvendor.models.Vendor;
 import com.aloranking.foodvendor.repositories.AuthUserRepository;

@@ -30,7 +30,7 @@ public class AuthUser {
     private Vendor vendor;
 
     @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
+    @JoinColumn(name = "role_id", referencedColumnName = "role")
     private Role role;
 
     public AuthUser() {
