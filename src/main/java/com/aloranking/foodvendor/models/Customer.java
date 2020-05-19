@@ -41,6 +41,9 @@ public class Customer {
     private AuthUser authUser;
 
 
+
+
+
     public Customer() {
     }
 

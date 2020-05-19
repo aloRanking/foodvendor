@@ -3,6 +3,7 @@ package com.aloranking.foodvendor.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "menu")
@@ -20,10 +21,20 @@ public class Menu {
 
     @ManyToOne
     @JoinColumn(name = "vendor_id", nullable = false)
-
     private Vendor vendor;
 
+    @ManyToMany(mappedBy = "items_ordered")
+    private Set<Order> orders;
+
     public Menu() {
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 
     public Vendor getVendor() {
