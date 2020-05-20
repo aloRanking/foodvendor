@@ -1,6 +1,7 @@
 package com.aloranking.foodvendor.models;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -12,7 +13,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
-    private String order_status;
     private double amount_paid;
     private double amount_due;
 
@@ -21,7 +21,7 @@ public class Order {
     @JoinTable(name = "ordered_menu",
             joinColumns = { @JoinColumn(name = "order_id") },
             inverseJoinColumns = { @JoinColumn(name = "menu_id") })
-    private Set<Menu> items_ordered;
+    private List<Menu> items_ordered;
 
     @ManyToOne
     @JoinColumn(name = "vendor_id")
@@ -31,15 +31,19 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @ManyToOne
+    @JoinColumn(name = "order_status_id")
+    private OrderStatus order_status;
+
 
     public Order() {
     }
 
-    public Set<Menu> getItems_ordered() {
+    public List<Menu> getItems_ordered() {
         return items_ordered;
     }
 
-    public void setItems_ordered(Set<Menu> items_ordered) {
+    public void setItems_ordered(List<Menu> items_ordered) {
         this.items_ordered = items_ordered;
     }
 
@@ -75,11 +79,11 @@ public class Order {
         this.description = description;
     }
 
-    public String getOrder_status() {
+    public OrderStatus getOrder_status() {
         return order_status;
     }
 
-    public void setOrder_status(String order_status) {
+    public void setOrder_status(OrderStatus order_status) {
         this.order_status = order_status;
     }
 

@@ -29,6 +29,10 @@ public class Menu {
     public Menu() {
     }
 
+    public Menu(Long id) {
+        this.id = id;
+    }
+
     public Set<Order> getOrders() {
         return orders;
     }

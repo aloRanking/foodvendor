@@ -1,5 +1,6 @@
 package com.aloranking.foodvendor.controllers;
 
+import com.aloranking.foodvendor.exceptions.UserNotFoundException;
 import com.aloranking.foodvendor.models.AuthUser;
 import com.aloranking.foodvendor.models.Customer;
 import com.aloranking.foodvendor.models.Password;
@@ -105,8 +106,10 @@ public class AuthorizationController {
 
     @PostMapping
     @RequestMapping("vendor/{id}/set-password")
-    public String addVendorUser(@PathVariable("id") Long id, @RequestBody Password password){
-        Vendor existingVendor = vendorService.getVendor(id);//.orElseThrow(() -> new UserNotFoundException(id));
+    public String addVendorUser(@PathVariable("id") Long id, @RequestBody Password password) {
+
+        Vendor existingVendor = vendorService.getVendor(id);
+
         Vendor vendor = vendorService.addUser(existingVendor, password.getPassword());
 
         return "Successfully updated";

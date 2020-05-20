@@ -1,5 +1,6 @@
 package com.aloranking.foodvendor.services;
 
+import com.aloranking.foodvendor.exceptions.UserNotFoundException;
 import com.aloranking.foodvendor.models.AuthUser;
 import com.aloranking.foodvendor.models.Role;
 import com.aloranking.foodvendor.models.Vendor;
