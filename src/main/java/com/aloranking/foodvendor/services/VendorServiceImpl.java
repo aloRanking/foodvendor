@@ -38,7 +38,13 @@ public class VendorServiceImpl implements VendorService {
     @Override
     public Vendor getVendor(Long id) {
 
-        return vendorRepository.getOne(id);
+        Vendor vendor = new Vendor();
+        try {
+            vendor = vendorRepository.getOne(id);
+        }catch (Exception e){
+            throw new UserNotFoundException("Vendor with id  " + id + "  does not exist ");
+        }
+        return  vendor;
     }
 
     public AuthUser createUser(String email, String password, Vendor vendor){

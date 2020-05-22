@@ -24,6 +24,7 @@ public class Menu {
     private Vendor vendor;
 
     @ManyToMany(mappedBy = "items_ordered")
+    @JsonIgnore
     private Set<Order> orders;
 
     public Menu() {

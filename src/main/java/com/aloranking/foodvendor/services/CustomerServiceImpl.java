@@ -1,6 +1,7 @@
 package com.aloranking.foodvendor.services;
 
 
+import com.aloranking.foodvendor.exceptions.UserNotFoundException;
 import com.aloranking.foodvendor.models.AuthUser;
 import com.aloranking.foodvendor.models.Customer;
 import com.aloranking.foodvendor.models.Role;
@@ -10,6 +11,8 @@ import com.aloranking.foodvendor.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public class CustomerServiceImpl  implements CustomerService{
@@ -71,7 +74,11 @@ public class CustomerServiceImpl  implements CustomerService{
     @Override
     public Customer getCustomer(Long id) {
 
-        return customerRepository.getOne(id);
+        Customer customer  = customerRepository.getOne(id);
+
+        return customer;
+
+
     }
 
 

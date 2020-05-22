@@ -11,6 +11,8 @@ import com.aloranking.foodvendor.repositories.VendorRepository;
 import com.aloranking.foodvendor.services.CustomerService;
 import com.aloranking.foodvendor.services.VendorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,85 +36,41 @@ public class AuthorizationController {
     private VendorRepository vendorRepository;
 
 
-    @PostMapping
-    @RequestMapping("/register/user")
-    public String create(@RequestBody AuthUser authUser){
-        Customer customer = new Customer();
-        customer.setEmail("kido@gmail.com");
-        customer.setFirst_name("kido");
-        customer.setLast_name("Noffi");
-        customer.setPhone_number("12345");
-        customer.setAmount_outstanding(45.0);
-
-        customer.setAuthUser(authUser);
-        authUser.setCustomer(customer);
-
-
-        authUserRepository.save(authUser);
-        return ("<h1> User saved </h1>");
-    }
-
     @GetMapping
     @RequestMapping("/user/{id}")
-    public AuthUser fetch(@PathVariable Long id){
+    public AuthUser fetch(@PathVariable Long id) {
         return authUserRepository.getOne(id);
     }
 
     @GetMapping
     @RequestMapping("/home")
-    public String home(){
+    public String home() {
         return ("<h1> Welcome Home</h1>");
     }
 
 
-
-    @GetMapping
-    @RequestMapping("/customer/get-all")
-    public List<Customer> list(){
-        return customerRepository.findAll();
-    }
-
-    @GetMapping
-    @RequestMapping("/customer/{id}")
-    public Customer get(@PathVariable Long id){
-        return customerRepository.getOne(id);
-    }
-
-
-    @PostMapping
-    @RequestMapping("/register/customer")
-    public String create(@RequestBody final Customer customer){
-        customerRepository.saveAndFlush(customer);
-        return "Successfully Register";
-
-    }
-
-    @PostMapping
-    @RequestMapping("/register/vendor")
-    public String create(@RequestBody final Vendor vendor){
-         vendorRepository.saveAndFlush(vendor);
-
-        return ("<h1> Successfully Registered </h1>");
-    }
-
     @PostMapping
     @RequestMapping("/customer/{id}/set-password")
-    public String addUser(@PathVariable("id") Long id, @RequestBody Password password){
-        Customer existingCustomer = customerService.getCustomer(id);//.orElseThrow(() -> new UserNotFoundException(id));
-        Customer customer = customerService.addUser(existingCustomer, password.getPassword());
-
-        return "Successfully updated";
+    public ResponseEntity addUser(@PathVariable("id") Long id, @RequestBody Password password) {
+        try {
+            Customer existingCustomer = customerService.getCustomer(id);
+            Customer customer = customerService.addUser(existingCustomer, password.getPassword());
+        } catch (Exception e) {
+            throw new UserNotFoundException("Customer with id  " + id + "  does not exist ");
+        }
+        return new ResponseEntity("<h1>Password Set Successfully</h1>", HttpStatus.ACCEPTED);
     }
 
     @PostMapping
     @RequestMapping("vendor/{id}/set-password")
     public String addVendorUser(@PathVariable("id") Long id, @RequestBody Password password) {
-
-        Vendor existingVendor = vendorService.getVendor(id);
-
-        Vendor vendor = vendorService.addUser(existingVendor, password.getPassword());
-
-        return "Successfully updated";
+        try {
+            Vendor existingVendor = vendorService.getVendor(id);
+            Vendor vendor = vendorService.addUser(existingVendor, password.getPassword());
+        } catch (Exception e) {
+            throw new UserNotFoundException("Vendor with id  " + id + "  does not exist ");
+        }
+        return ("<h1>Password Set Successfully</h1>");
     }
 
 

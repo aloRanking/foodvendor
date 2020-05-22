@@ -1,5 +1,7 @@
 package com.aloranking.foodvendor.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +31,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
+   // @JsonIgnore
     private Customer customer;
 
     @ManyToOne
