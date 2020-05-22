@@ -4,6 +4,7 @@ import com.aloranking.foodvendor.models.*;
 import com.aloranking.foodvendor.repositories.MenuRepository;
 import com.aloranking.foodvendor.repositories.OrderRepository;
 import com.aloranking.foodvendor.repositories.OrderStatusRepository;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,9 +41,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getAllOrdersForCustomer(Customer customer) {
 
-        List<Order> orders = orderRepository.findByCustomer(customer);
+        List<Order> customerOrders = orderRepository.findByCustomer(customer);
 
-        return orders;
+        return customerOrders;
 
+    }
+
+    @Override
+    public List<Order> getAllOrdersForVendor(Vendor vendor) {
+        List<Order> vendorOrders = orderRepository.findByVendor(vendor);
+        return vendorOrders;
     }
 }

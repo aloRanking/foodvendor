@@ -18,4 +18,5 @@ public interface OrderService {
     public List<Order> getAllOrdersForCustomer (Customer customer);
 
 
+    public List<Order> getAllOrdersForVendor(Vendor vendor);
 }

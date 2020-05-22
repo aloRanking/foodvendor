@@ -5,7 +5,7 @@ The customer and the vendor shoud register through the api endpoint
 
 "/customer/register" and  "/vendor/register" respectively.
 
-then proceed to to set there password through
+then proceed to  set their password through
 
 Customer: /customer/{customerId}/set-password
 
@@ -24,7 +24,9 @@ The vendor will create menu through: "/home/{vendorId}/create-menu".
 
 To get list of Orders : "/home/orders"
 
-To get specific customer Order: "/home/{customerId}/orders"
+To get a specific customer Order: "/home/customer/{customerId}/orders"
+
+To get a specific Vendor orders : "/home/vendor/{vendorId}/orders"
 
 
 **CUSTOMER**

@@ -77,16 +77,23 @@ public class OrderController {
 
     }*/
 
-    @GetMapping("/home/{customerId}/orders")
+    @GetMapping("/home/customer/{customerId}/orders")
     public List<Order> getCustomerOrder(@PathVariable Long customerId){
 
             Customer existingCustomer = customerService.getCustomer(customerId);
            // if (existingCustomer == null)  throw new UserNotFoundException("Customer with id  " + customerId + "  does not exist ");
-            List<Order> orders = orderService.getAllOrdersForCustomer(existingCustomer);
-            return orders;
+            List<Order> allOrdersOFCustomer = orderService.getAllOrdersForCustomer(existingCustomer);
+            return allOrdersOFCustomer;
 
     }
 
+    @GetMapping("/home/vendor/{vendorId}/orders")
+    public List<Order> getVendorOrder(@PathVariable Long vendorId){
+        Vendor existingVendor = vendorService.getVendor(vendorId);
+
+        List<Order> allOrdersForVendor =orderService.getAllOrdersForVendor(existingVendor);
+        return allOrdersForVendor;
+    }
 
 
 
