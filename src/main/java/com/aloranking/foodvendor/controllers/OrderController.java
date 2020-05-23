@@ -12,24 +12,15 @@ import com.aloranking.foodvendor.repositories.VendorRepository;
 import com.aloranking.foodvendor.services.CustomerService;
 import com.aloranking.foodvendor.services.OrderService;
 import com.aloranking.foodvendor.services.VendorService;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.data.util.ReflectionUtils;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.util.ReflectionUtils.findField;
 
 @RestController
@@ -51,6 +42,9 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private OrderStatusRepository orderStatusRepository;
 
     @GetMapping
     @RequestMapping("/home/orders")
@@ -103,7 +97,6 @@ public class OrderController {
                                       @RequestBody Order order, @PathVariable Long vendorId,
                                       @RequestParam  Long [] menuId)  {
 
-
           Customer existingCustomer = customerService.getCustomer(customerId);
           if (existingCustomer == null){
               throw new UserNotFoundException("Customer with id  " + customerId + "  does not exist ");
@@ -120,16 +113,15 @@ public class OrderController {
 
     }
 
-   /* @PatchMapping
-    @RequestMapping("/home/order/{orderId}")
-    public ResponseEntity<Order> updateOrder(@PathVariable Long orderId, @RequestBody Map<String, Object> fields){
-       // Order order = orderService.getOrder(orderId);
-        // Map key is field name, v is value
 
+    @RequestMapping("/home/vendor/update-order/{orderId}")
+    public Order vendorUpdateOrder(@PathVariable Long orderId, @RequestParam String orderstatus){
+        Order order = orderService.getOrder(orderId);
+        String mssg = orderstatus.toUpperCase();
+        OrderStatus message = orderStatusRepository.findByOrderStatus(mssg);
+        order.setOrder_status(message);
 
+        return orderRepository.save(order);
 
-
-
-
-    }*/
+    }
 }

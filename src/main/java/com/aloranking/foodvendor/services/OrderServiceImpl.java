@@ -27,7 +27,7 @@ public class OrderServiceImpl implements OrderService {
         List<Long> menus = Arrays.asList(menuId);
         Iterable<Menu> menu = menuRepository.findByIdIn(menus);
         order.setItems_ordered((List<Menu>) menu);
-        OrderStatus message = orderStatusRepository.findByOrderStatus("Pending");
+        OrderStatus message = orderStatusRepository.findByOrderStatus("PENDING");
         order.setOrder_status(message);
         return orderRepository.save(order);
     }
