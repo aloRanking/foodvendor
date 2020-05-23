@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "vendors")
-public class Vendor {
+public class Vendor extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

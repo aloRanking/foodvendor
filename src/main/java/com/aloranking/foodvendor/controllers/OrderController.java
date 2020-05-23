@@ -124,4 +124,17 @@ public class OrderController {
         return orderRepository.save(order);
 
     }
+
+    @RequestMapping("/home/customer/update-order/{orderId}")
+    public Order customerUpdateOrder(@PathVariable Long orderId, @RequestParam String orderstatus){
+        Order order = orderService.getOrder(orderId);
+        String mssg = orderstatus.toUpperCase();
+        if (mssg == "ACCEPTED" || mssg =="PENDING" || mssg =="READY")
+            throw new UserNotFoundException("Customer can only cancel order using the word \"cancelled");
+        OrderStatus message = orderStatusRepository.findByOrderStatus(mssg);
+        order.setOrder_status(message);
+
+        return orderRepository.save(order);
+
+    }
 }

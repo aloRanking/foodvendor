@@ -7,7 +7,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "menu")
-public class Menu {
+public class Menu extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "auth_users")
-public class AuthUser {
+public class AuthUser  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

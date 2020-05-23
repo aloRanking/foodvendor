@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "order_table")
-public class Order {
+public class Order extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
