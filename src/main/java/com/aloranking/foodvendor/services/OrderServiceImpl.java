@@ -1,9 +1,7 @@
 package com.aloranking.foodvendor.services;
 
 import com.aloranking.foodvendor.models.*;
-import com.aloranking.foodvendor.repositories.MenuRepository;
-import com.aloranking.foodvendor.repositories.OrderRepository;
-import com.aloranking.foodvendor.repositories.OrderStatusRepository;
+import com.aloranking.foodvendor.repositories.*;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,16 +18,30 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
     @Autowired
     private MenuRepository menuRepository;
+    @Autowired
+    private AuthUserRepository authUserRepository;
+    @Autowired
+    NotificationMessageRepository notificationMessageRepository;
+    @Autowired
+    NotificationRepository notificationRepository;
 
     @Override
-    public Order createOrder(Order order, Vendor vendor, Long [] menuId) {
+    public Order createOrder(Order order, Vendor vendor,  Customer customer, Long [] menuId) {
 
         List<Long> menus = Arrays.asList(menuId);
         Iterable<Menu> menu = menuRepository.findByIdIn(menus);
         order.setItems_ordered((List<Menu>) menu);
         OrderStatus message = orderStatusRepository.findByOrderStatus("PENDING");
         order.setOrder_status(message);
+
+        //sendNotification(order, vendor, customer,menuId);
+
+
         return orderRepository.save(order);
+    }
+
+   public void sendNotification(Order order, Vendor vendor, Customer customer, Long [] menuId) {
+
     }
 
 

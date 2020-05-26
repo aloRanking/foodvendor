@@ -1,7 +1,9 @@
 package com.aloranking.foodvendor.services;
 
+import com.aloranking.foodvendor.models.NotificationMessage;
 import com.aloranking.foodvendor.models.OrderStatus;
 import com.aloranking.foodvendor.models.Role;
+import com.aloranking.foodvendor.repositories.NotificationMessageRepository;
 import com.aloranking.foodvendor.repositories.OrderStatusRepository;
 import com.aloranking.foodvendor.repositories.RoleRepository;
 import org.springframework.beans.factory.InitializingBean;
@@ -18,25 +20,46 @@ public class AppInit implements InitializingBean {
 private RoleRepository repo;
     @Autowired
     OrderStatusRepository orderStatusRepository;
+    @Autowired
+    NotificationMessageRepository notificationMessageRepository;
 
     @Override
 public void afterPropertiesSet() throws Exception {
         boolean rolesNotPresent = repo.count() <= 0;
         boolean orderMssgNotPresent = orderStatusRepository.count()<=0;
+        boolean notificatonMssgNotPresent =notificationMessageRepository.count()<=0;
 
-        if( ! rolesNotPresent &&  ! orderMssgNotPresent ) {
+
+        if( ! rolesNotPresent &&  ! orderMssgNotPresent && ! notificatonMssgNotPresent) {
             return;
-        }else if (rolesNotPresent && ! orderMssgNotPresent ) {
+        }else if (rolesNotPresent && ! orderMssgNotPresent && !notificatonMssgNotPresent ) {
             createRoles();
-        }else if ( ! rolesNotPresent && orderMssgNotPresent)
+        }else if ( ! rolesNotPresent && orderMssgNotPresent && ! notificatonMssgNotPresent) {
             createOrderMssgs();
-        else if (rolesNotPresent && orderMssgNotPresent ){
+        }else if ( ! rolesNotPresent && ! orderMssgNotPresent &&  notificatonMssgNotPresent)
+            createNotifictionMessageStatus();
+        else if (rolesNotPresent && orderMssgNotPresent &&  notificatonMssgNotPresent ){
             createRoles();;
             createOrderMssgs();
+            createNotifictionMessageStatus();
 
         }
 
 }
+
+    private void createNotifictionMessageStatus() {
+        List<NotificationMessage> messages = new ArrayList<>();
+        NotificationMessage mssg1 = new NotificationMessage("SENT");
+        NotificationMessage mssg2 = new NotificationMessage("DELIVERED");
+        NotificationMessage mssg3 = new NotificationMessage("CANCELLED");
+
+        messages.add(mssg1);
+        messages.add(mssg2);
+        messages.add(mssg3);
+
+        notificationMessageRepository.saveAll(messages);
+
+    }
 
     private void createOrderMssgs() {
         List<OrderStatus> messages = new ArrayList<>();

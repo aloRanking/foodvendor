@@ -47,7 +47,7 @@ public class VendorController {
     }
 
     @PostMapping
-    @RequestMapping("/home/{vendorId}/create-menu")
+    @RequestMapping("/home/vendor/{vendorId}/create-menu")
     public Menu createMenu(@PathVariable Long vendorId, @RequestBody Menu menu) {
         try {
             Vendor existingVendor = vendorService.getVendor(vendorId);

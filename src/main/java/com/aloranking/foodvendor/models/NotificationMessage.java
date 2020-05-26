@@ -4,13 +4,33 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "notification_message")
-public class NotificationMessage extends AuditModel {
+public class NotificationMessage  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String notification_message;
+    private String notificationMessage;
 
     public NotificationMessage() {
+    }
+
+    public NotificationMessage(String notificationMessage) {
+        this.notificationMessage = notificationMessage;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNotificationMessage() {
+        return notificationMessage;
+    }
+
+    public void setNotificationMessage(String notificationMessage) {
+        this.notificationMessage = notificationMessage;
     }
 }

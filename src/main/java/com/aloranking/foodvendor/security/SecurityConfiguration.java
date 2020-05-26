@@ -32,14 +32,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers("/login").permitAll()
                 .antMatchers("/register/customer","/register/vendor").permitAll()
                 .antMatchers("/customer/{id}/set-password","/vendor/{id}/set-password").permitAll()
-               .antMatchers("/customer/all","/customer/{id}","/home/{customerId}/create-order/{vendorId}").permitAll()
+               .antMatchers("/customer/all","/customer/{id}","/home/menus","/vendor/{id}","/vendor/all").permitAll()
+                .antMatchers("/home/customer/**").permitAll()
+                .antMatchers( "/home/vendor/**").permitAll()
                 .antMatchers().permitAll()
-                .antMatchers( "/home/{vendorId}/create-menu","/home/menus","/vendor/{id}","/vendor/all").permitAll()
-                .antMatchers("/login").permitAll()
-                .antMatchers().permitAll()
-                .antMatchers("/home/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable().formLogin()

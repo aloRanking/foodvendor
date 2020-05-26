@@ -1,15 +1,10 @@
 package com.aloranking.foodvendor.controllers;
 
 import com.aloranking.foodvendor.exceptions.UserNotFoundException;
-import com.aloranking.foodvendor.models.Customer;
-import com.aloranking.foodvendor.models.Order;
-import com.aloranking.foodvendor.models.OrderStatus;
-import com.aloranking.foodvendor.models.Vendor;
-import com.aloranking.foodvendor.repositories.CustomerRepository;
-import com.aloranking.foodvendor.repositories.OrderRepository;
-import com.aloranking.foodvendor.repositories.OrderStatusRepository;
-import com.aloranking.foodvendor.repositories.VendorRepository;
+import com.aloranking.foodvendor.models.*;
+import com.aloranking.foodvendor.repositories.*;
 import com.aloranking.foodvendor.services.CustomerService;
+import com.aloranking.foodvendor.services.NotificationService;
 import com.aloranking.foodvendor.services.OrderService;
 import com.aloranking.foodvendor.services.VendorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +40,12 @@ public class OrderController {
 
     @Autowired
     private OrderStatusRepository orderStatusRepository;
+    @Autowired
+    private AuthUserRepository authUserRepository;
+    @Autowired
+    NotificationMessageRepository notificationMessageRepository;
+    @Autowired
+    NotificationService notificationService;
 
     @GetMapping
     @RequestMapping("/home/orders")
@@ -54,22 +55,7 @@ public class OrderController {
 
     }
 
-/*    @GetMapping
-    @RequestMapping("/home/orders")
-    public CollectionModel<Order> all(){
 
-       // return orderRepository.findAll();
-
-        List<EntityModel<Order>> orders = orderRepository.findAll().stream()
-                .map(order -> new EntityModel<>(order,
-                        linkTo(OrderController.class).slash(order.getId()).withSelfRel(),
-                        linkTo(OrderController.class).withRel("orders")))
-                .collect(Collectors.toList());
-
-        return new EntityModel<Order>(orders,
-                linkTo(methodOn(OrderController.class)).all()).withSelfRel();
-
-    }*/
 
     @GetMapping("/home/customer/{customerId}/orders")
     public List<Order> getCustomerOrder(@PathVariable Long customerId){
@@ -92,22 +78,18 @@ public class OrderController {
 
 
     @PostMapping
-    @RequestMapping("home/{customerId}/create-order/{vendorId}")
+    @RequestMapping("home/customer/{customerId}/create-order/vendor/{vendorId}")
     public ResponseEntity<Order> createOrder(@PathVariable Long customerId,
                                       @RequestBody Order order, @PathVariable Long vendorId,
                                       @RequestParam  Long [] menuId)  {
 
           Customer existingCustomer = customerService.getCustomer(customerId);
-          if (existingCustomer == null){
-              throw new UserNotFoundException("Customer with id  " + customerId + "  does not exist ");
-          }
+
           order.setCustomer(existingCustomer);
            Vendor existingVendor = vendorService.getVendor(vendorId);
-           if (existingVendor==null)
-               throw new UserNotFoundException("Vendor with id  " + vendorId + "  does not exist ");
-
            order.setVendor(existingVendor);
-           orderService.createOrder(order, existingVendor, menuId);
+          Order order1= orderService.createOrder(order, existingVendor,existingCustomer, menuId);
+          notificationService.sendNotification(order1,existingVendor,existingCustomer,menuId);
 
         return new ResponseEntity<Order>(order, HttpStatus.CREATED);
 
@@ -120,6 +102,8 @@ public class OrderController {
         String mssg = orderstatus.toUpperCase();
         OrderStatus message = orderStatusRepository.findByOrderStatus(mssg);
         order.setOrder_status(message);
+        notificationService.sendOrderUpdateNotification(order,order.getVendor(),order.getCustomer(), mssg);
+
 
         return orderRepository.save(order);
 

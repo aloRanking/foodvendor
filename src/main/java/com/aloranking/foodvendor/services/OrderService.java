@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public interface OrderService {
 
-    public Order createOrder(Order order, Vendor vendor, Long [] menuId);
+    public Order createOrder(Order order, Vendor vendor, Customer customer, Long [] menuId);
 
     public Order getOrder(Long id);
 

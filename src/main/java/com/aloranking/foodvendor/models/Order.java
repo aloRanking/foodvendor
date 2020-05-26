@@ -34,7 +34,7 @@ public class Order extends AuditModel {
    // @JsonIgnore
     private Customer customer;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_status_id")
     private OrderStatus order_status;
 
