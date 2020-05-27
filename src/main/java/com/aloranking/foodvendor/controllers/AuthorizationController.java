@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class AuthorizationController {
@@ -42,11 +43,14 @@ public class AuthorizationController {
         return authUserRepository.getOne(id);
     }
 
+
+
     @GetMapping
     @RequestMapping("/home")
     public String home() {
         return ("<h1> Welcome Home</h1>");
     }
+
 
 
     @PostMapping
