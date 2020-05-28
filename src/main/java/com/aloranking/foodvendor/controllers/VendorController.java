@@ -1,7 +1,6 @@
 package com.aloranking.foodvendor.controllers;
 
 import com.aloranking.foodvendor.exceptions.UserNotFoundException;
-import com.aloranking.foodvendor.models.Customer;
 import com.aloranking.foodvendor.models.Menu;
 import com.aloranking.foodvendor.models.Vendor;
 import com.aloranking.foodvendor.repositories.MenuRepository;
