@@ -17,6 +17,15 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    private static final String[] AUTH_WHITELIST = {
+
+            // -- swagger ui
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/v2/api-docs",
+            "/webjars/**"
+    };
+
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -32,6 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers("/","/login").permitAll()
                 .antMatchers("/register/customer","/register/vendor").permitAll()
                 .antMatchers("/customer/{id}/set-password","/vendor/{id}/set-password").permitAll()
