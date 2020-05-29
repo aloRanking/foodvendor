@@ -33,15 +33,7 @@ public class OrderServiceImpl implements OrderService {
         order.setItems_ordered((List<Menu>) menu);
         OrderStatus message = orderStatusRepository.findByOrderStatus("PENDING");
         order.setOrder_status(message);
-
-        //sendNotification(order, vendor, customer,menuId);
-
-
         return orderRepository.save(order);
-    }
-
-   public void sendNotification(Order order, Vendor vendor, Customer customer, Long [] menuId) {
-
     }
 
 
@@ -52,16 +44,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAllOrdersForCustomer(Customer customer) {
-
-        List<Order> customerOrders = orderRepository.findByCustomer(customer);
-
-        return customerOrders;
-
+        return orderRepository.findByCustomer(customer);
     }
 
     @Override
     public List<Order> getAllOrdersForVendor(Vendor vendor) {
-        List<Order> vendorOrders = orderRepository.findByVendor(vendor);
-        return vendorOrders;
+        return orderRepository.findByVendor(vendor);
     }
 }
