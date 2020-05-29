@@ -30,6 +30,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/v2/api-docs",
             "/webjars/**"
     };
+    private static final String[] API_WHITELIST = {
+            "/", "/api/v1/authenticate",
+            "/api/v1/customers/register", "/api/v1/vendors/register",
+            "/api/v1/customers/{id}/set-password", "/api/v1/vendors/{id}/set-password"
+    };
+
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -56,7 +62,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/api/v1/authenticate").permitAll()
+                .antMatchers(API_WHITELIST).permitAll()
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated().and().
                 exceptionHandling().and().sessionManagement()
