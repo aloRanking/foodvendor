@@ -48,4 +48,11 @@ public class NotificationServiceImpl implements NotificationService {
         notificationRepository.save(notification);
 
     }
+
+    @Override
+    public List<Notification> getAllNotifications(AuthUser authUser) {
+        return notificationRepository.findBySubjectUser(authUser);
+    }
+
+
 }
