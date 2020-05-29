@@ -16,6 +16,7 @@ import java.util.List;
 
 
 @RestController
+@RequestMapping("api/v1/orders")
 public class OrderController {
     @Autowired
     private CustomerService customerService;
@@ -30,18 +31,18 @@ public class OrderController {
     @Autowired
     NotificationService notificationService;
 
-    @GetMapping("/orders")
+    @GetMapping
     public List<Order> listOrders(){
         return orderRepository.findAll();
 
     }
 
-    @GetMapping("/orders/{id}")
+    @GetMapping("{id}")
     public Order getOrder(@PathVariable Long id) {
         return orderRepository.getOne(id);
     }
 
-    @GetMapping("/customer/{customerId}/orders")
+    @GetMapping("/customer/{customerId}")
     public List<Order> getAllCustomerOrder(@PathVariable Long customerId){
 
             Customer existingCustomer = customerService.getCustomer(customerId);
@@ -49,7 +50,7 @@ public class OrderController {
 
     }
 
-    @GetMapping("/vendor/{vendorId}/orders")
+    @GetMapping("/vendor/{vendorId}/")
     public List<Order> getAllVendorOrder(@PathVariable Long vendorId){
         Vendor existingVendor = vendorService.getVendor(vendorId);
         return orderService.getAllOrdersForVendor(existingVendor);

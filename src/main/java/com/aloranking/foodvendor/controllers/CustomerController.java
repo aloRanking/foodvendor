@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("api/v1/customers")
 public class CustomerController {
 
     @Autowired
@@ -22,26 +23,26 @@ public class CustomerController {
     private CustomerService customerService;
 
 
-    @PostMapping(value = "/register/customer")
+    @PostMapping( "/register")
     public ResponseEntity<Customer> createCustomer(@RequestBody final Customer customer){
         customerRepository.saveAndFlush(customer);
 
         return new ResponseEntity<>(customer, HttpStatus.CREATED);
     }
 
-    @GetMapping( "/customers"  )
+    @GetMapping
     public List<Customer> listCustomers(){
         return customerRepository.findAll();
     }
 
 
-    @GetMapping( "/customers/{id}")
+    @GetMapping( "{id}")
     public Customer getCustomer(@PathVariable Long id){
         return customerRepository.getOne(id);
     }
 
 
-    @PostMapping( "/customers/{id}/set-password")
+    @PostMapping( "{id}/set-password")
     public ResponseEntity addCustomerUser(@PathVariable("id") Long id, @RequestBody Password password) {
         try {
             Customer existingCustomer = customerService.getCustomer(id);

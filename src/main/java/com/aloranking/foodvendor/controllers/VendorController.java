@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("api/v1/vendors")
 public class VendorController {
 
     @Autowired
@@ -26,12 +27,12 @@ public class VendorController {
     @Autowired
     private VendorService vendorService;
 
-    @GetMapping("/vendors")
+    @GetMapping
     public List<Vendor> listVendors() {
         return vendorRepository.findAll();
     }
 
-    @GetMapping("/vendors/{id}")
+    @GetMapping("{id}")
     public Vendor getVendor(@PathVariable Long id) {
         return vendorRepository.getOne(id);
     }
@@ -42,7 +43,7 @@ public class VendorController {
         return new ResponseEntity<>(vendor, HttpStatus.CREATED);
     }
 
-    @PostMapping("/vendors/{id}/set-password")
+    @PostMapping("/{id}/set-password")
     public String addVendorUser(@PathVariable("id") Long id, @RequestBody Password password) {
         try {
             Vendor existingVendor = vendorService.getVendor(id);

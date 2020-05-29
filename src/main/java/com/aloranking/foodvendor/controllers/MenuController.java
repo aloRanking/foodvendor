@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("api/v1/menus")
 public class MenuController {
 
     @Autowired
@@ -18,12 +19,12 @@ public class MenuController {
     @Autowired
     private VendorService vendorService;
 
-    @GetMapping("/menus")
+    @GetMapping
     public List<Menu> listMenu() {
         return menuRepository.findAll();
     }
 
-    @GetMapping("/menus/{id}")
+    @GetMapping("{id}")
     public Menu getMenu(@PathVariable Long id) {
         return menuRepository.getOne(id);
     }

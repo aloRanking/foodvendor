@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("api/v1/notification")
 public class NotificationController  {
 
 @Autowired
@@ -21,7 +22,7 @@ private AuthUserRepository authUserRepository;
 @Autowired
 private AuthUserService authUserService;
 
-    @GetMapping("/notification/{authUserId}/all")
+    @GetMapping("/{authUserId}/all")
     public List<Notification> getAllAuthUserNotification(@PathVariable Long authUserId){
 
         AuthUser authUser = authUserService.getAuthUser(authUserId);
