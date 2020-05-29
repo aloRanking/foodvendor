@@ -17,8 +17,7 @@ public class HomeController {
     @Value("${app.name}")
     private String appName;
 
-    @GetMapping
-    @RequestMapping("/")
+    @GetMapping("/")
     public Map getStatus() {
         Map map = new HashMap<String, String>();
         map.put("app-name", appName);

@@ -11,109 +11,84 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-
 import java.util.List;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.util.ReflectionUtils.findField;
+
 
 @RestController
 public class OrderController {
     @Autowired
     private CustomerService customerService;
-
     @Autowired
     private VendorService vendorService;
-
-    @Autowired
-    private VendorRepository vendorRepository;
-
-    @Autowired
-    private CustomerRepository customerRepository;
-
     @Autowired
     private OrderRepository orderRepository;
-
     @Autowired
     private OrderService orderService;
-
     @Autowired
     private OrderStatusRepository orderStatusRepository;
     @Autowired
-    private AuthUserRepository authUserRepository;
-    @Autowired
-    NotificationMessageRepository notificationMessageRepository;
-    @Autowired
     NotificationService notificationService;
 
-    @GetMapping
-    @RequestMapping("/home/orders")
-    public List<Order> getAll(){
-
+    @GetMapping("/orders")
+    public List<Order> listOrders(){
         return orderRepository.findAll();
 
     }
 
+    @GetMapping("/orders/{id}")
+    public Order getOrder(@PathVariable Long id) {
+        return orderRepository.getOne(id);
+    }
 
-
-    @GetMapping("/home/customer/{customerId}/orders")
-    public List<Order> getCustomerOrder(@PathVariable Long customerId){
+    @GetMapping("/customer/{customerId}/orders")
+    public List<Order> getAllCustomerOrder(@PathVariable Long customerId){
 
             Customer existingCustomer = customerService.getCustomer(customerId);
-           // if (existingCustomer == null)  throw new UserNotFoundException("Customer with id  " + customerId + "  does not exist ");
-            List<Order> allOrdersOFCustomer = orderService.getAllOrdersForCustomer(existingCustomer);
-            return allOrdersOFCustomer;
+        return orderService.getAllOrdersForCustomer(existingCustomer);
 
     }
 
-    @GetMapping("/home/vendor/{vendorId}/orders")
-    public List<Order> getVendorOrder(@PathVariable Long vendorId){
+    @GetMapping("/vendor/{vendorId}/orders")
+    public List<Order> getAllVendorOrder(@PathVariable Long vendorId){
         Vendor existingVendor = vendorService.getVendor(vendorId);
-
-        List<Order> allOrdersForVendor =orderService.getAllOrdersForVendor(existingVendor);
-        return allOrdersForVendor;
+        return orderService.getAllOrdersForVendor(existingVendor);
     }
 
 
 
-    @PostMapping
-    @RequestMapping("home/customer/{customerId}/create-order/vendor/{vendorId}")
+    @PostMapping("/customer/{customerId}/create-order/vendor/{vendorId}")
     public ResponseEntity<Order> createOrder(@PathVariable Long customerId,
                                       @RequestBody Order order, @PathVariable Long vendorId,
                                       @RequestParam  Long [] menuId)  {
-
           Customer existingCustomer = customerService.getCustomer(customerId);
-
           order.setCustomer(existingCustomer);
            Vendor existingVendor = vendorService.getVendor(vendorId);
            order.setVendor(existingVendor);
           Order order1= orderService.createOrder(order, existingVendor,existingCustomer, menuId);
           notificationService.sendNotification(order1,existingVendor,existingCustomer,menuId);
 
-        return new ResponseEntity<Order>(order, HttpStatus.CREATED);
+        return new ResponseEntity<>(order, HttpStatus.CREATED);
 
     }
 
 
-    @RequestMapping("/home/vendor/update-order/{orderId}")
+    @PutMapping("/vendor/update-order/{orderId}")
     public Order vendorUpdateOrder(@PathVariable Long orderId, @RequestParam String orderstatus){
         Order order = orderService.getOrder(orderId);
         String mssg = orderstatus.toUpperCase();
         OrderStatus message = orderStatusRepository.findByOrderStatus(mssg);
         order.setOrder_status(message);
         notificationService.sendOrderUpdateNotification(order,order.getVendor(),order.getCustomer(), mssg);
-
-
         return orderRepository.save(order);
 
     }
 
-    @RequestMapping("/home/customer/update-order/{orderId}")
+    @PutMapping("/customer/update-order/{orderId}")
     public Order customerUpdateOrder(@PathVariable Long orderId, @RequestParam String orderstatus){
         Order order = orderService.getOrder(orderId);
         String mssg = orderstatus.toUpperCase();
-        if (mssg == "ACCEPTED" || mssg =="PENDING" || mssg =="READY")
+        if (mssg.equals("ACCEPTED") || mssg.equals("PENDING") || mssg.equals("READY"))
             throw new UserNotFoundException("Customer can only cancel order using the word \"cancelled");
         OrderStatus message = orderStatusRepository.findByOrderStatus(mssg);
         order.setOrder_status(message);

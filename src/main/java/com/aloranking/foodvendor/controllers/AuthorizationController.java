@@ -21,61 +21,37 @@ import java.util.Map;
 @RestController
 public class AuthorizationController {
 
-    @Autowired
-    private CustomerRepository customerRepository;
+
 
     @Autowired
     private AuthUserRepository authUserRepository;
 
-    @Autowired
-    private CustomerService customerService;
+    @GetMapping(value = "/home")
+    public String home() {
+        return ("<h1> Welcome Home</h1>");
+    }
 
-    @Autowired
-    private VendorService vendorService;
+    @GetMapping(value = "/users")
+    public List<AuthUser> listAuthUsers(){
+        return authUserRepository.findAll();
+    }
 
-    @Autowired
-    private VendorRepository vendorRepository;
-
-
-    @GetMapping
-    @RequestMapping("/user/{id}")
-    public AuthUser fetch(@PathVariable Long id) {
+    @GetMapping(value = "/users/{id}")
+    public AuthUser getUser(@PathVariable Long id) {
         return authUserRepository.getOne(id);
     }
 
 
 
-    @GetMapping
-    @RequestMapping("/home")
-    public String home() {
-        return ("<h1> Welcome Home</h1>");
-    }
 
 
 
-    @PostMapping
-    @RequestMapping("/customer/{id}/set-password")
-    public ResponseEntity addUser(@PathVariable("id") Long id, @RequestBody Password password) {
-        try {
-            Customer existingCustomer = customerService.getCustomer(id);
-            Customer customer = customerService.addUser(existingCustomer, password.getPassword());
-        } catch (Exception e) {
-            throw new UserNotFoundException("Customer with id  " + id + "  does not exist ");
-        }
-        return new ResponseEntity("<h1>Password Set Successfully</h1>", HttpStatus.ACCEPTED);
-    }
 
-    @PostMapping
-    @RequestMapping("vendor/{id}/set-password")
-    public String addVendorUser(@PathVariable("id") Long id, @RequestBody Password password) {
-        try {
-            Vendor existingVendor = vendorService.getVendor(id);
-            Vendor vendor = vendorService.addUser(existingVendor, password.getPassword());
-        } catch (Exception e) {
-            throw new UserNotFoundException("Vendor with id  " + id + "  does not exist ");
-        }
-        return ("<h1>Password Set Successfully</h1>");
-    }
+
+
+
+
+
 
 
 }

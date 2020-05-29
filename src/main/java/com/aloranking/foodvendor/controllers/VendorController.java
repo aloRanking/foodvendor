@@ -2,6 +2,7 @@ package com.aloranking.foodvendor.controllers;
 
 import com.aloranking.foodvendor.exceptions.UserNotFoundException;
 import com.aloranking.foodvendor.models.Menu;
+import com.aloranking.foodvendor.models.Password;
 import com.aloranking.foodvendor.models.Vendor;
 import com.aloranking.foodvendor.repositories.MenuRepository;
 import com.aloranking.foodvendor.repositories.VendorRepository;
@@ -25,42 +26,31 @@ public class VendorController {
     @Autowired
     private VendorService vendorService;
 
-    @PostMapping
-    @RequestMapping("/register/vendor")
-    public ResponseEntity<Vendor> create(@RequestBody final Vendor vendor) {
-        vendorRepository.saveAndFlush(vendor);
-
-        return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
-    }
-
-    @GetMapping
-    @RequestMapping("/vendor/all")
-    public List<Vendor> listVendor() {
+    @GetMapping("/vendors")
+    public List<Vendor> listVendors() {
         return vendorRepository.findAll();
     }
 
-    @GetMapping
-    @RequestMapping("/vendor/{id}")
-    public Vendor get(@PathVariable Long id) {
+    @GetMapping("/vendors/{id}")
+    public Vendor getVendor(@PathVariable Long id) {
         return vendorRepository.getOne(id);
     }
 
-    @PostMapping
-    @RequestMapping("/home/vendor/{vendorId}/create-menu")
-    public Menu createMenu(@PathVariable Long vendorId, @RequestBody Menu menu) {
-        try {
-            Vendor existingVendor = vendorService.getVendor(vendorId);
-            menu.setVendor(existingVendor);
-        } catch (Exception e) {
-            throw new UserNotFoundException("Vendor with id  " + vendorId + "  does not exist ");
-        }
-        return menuRepository.saveAndFlush(menu);
+    @PostMapping("/register/vendor")
+    public ResponseEntity<Vendor> createVendor(@RequestBody final Vendor vendor) {
+        vendorRepository.saveAndFlush(vendor);
+        return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
     }
 
-    @GetMapping
-    @RequestMapping("/home/menus")
-    public List<Menu> list() {
-        return menuRepository.findAll();
+    @PostMapping("/vendor/{id}/set-password")
+    public String addVendorUser(@PathVariable("id") Long id, @RequestBody Password password) {
+        try {
+            Vendor existingVendor = vendorService.getVendor(id);
+            Vendor vendor = vendorService.addUser(existingVendor, password.getPassword());
+        } catch (Exception e) {
+            throw new UserNotFoundException("Vendor with id  " + id + "  does not exist ");
+        }
+        return ("<h1>Password Set Successfully</h1>");
     }
 
 

@@ -1,37 +1,34 @@
 package com.aloranking.foodvendor.controllers;
 
-import com.aloranking.foodvendor.models.Customer;
-import com.aloranking.foodvendor.models.Notification;
-import com.aloranking.foodvendor.models.Order;
-import com.aloranking.foodvendor.models.Vendor;
+import com.aloranking.foodvendor.models.*;
+import com.aloranking.foodvendor.repositories.AuthUserRepository;
 import com.aloranking.foodvendor.repositories.CustomerRepository;
 import com.aloranking.foodvendor.repositories.VendorRepository;
-import com.aloranking.foodvendor.services.CustomerService;
-import com.aloranking.foodvendor.services.OrderService;
-import com.aloranking.foodvendor.services.VendorService;
+import com.aloranking.foodvendor.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class NotificationController  {
 
-    @Autowired
-    private CustomerService customerService;
+@Autowired
+private NotificationService notificationService;
+@Autowired
+private AuthUserRepository authUserRepository;
+@Autowired
+private AuthUserService authUserService;
 
-    @Autowired
-    private VendorService vendorService;
+    @GetMapping("/notification/{authUserId}/all")
+    public List<Notification> getAllAuthUserNotification(@PathVariable Long authUserId){
 
-    @Autowired
-    private VendorRepository vendorRepository;
-    @Autowired
-    private CustomerRepository customerRepository;
-    @Autowired
-    private OrderService orderService;
+        AuthUser authUser = authUserService.getAuthUser(authUserId);
+
+        return notificationService.getAllNotifications(authUser);
+
+    }
 
 
 
