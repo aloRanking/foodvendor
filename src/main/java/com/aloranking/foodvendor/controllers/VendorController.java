@@ -39,10 +39,10 @@ public class VendorController {
     @PostMapping("/register/vendor")
     public ResponseEntity<Vendor> createVendor(@RequestBody final Vendor vendor) {
         vendorRepository.saveAndFlush(vendor);
-        return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
+        return new ResponseEntity<>(vendor, HttpStatus.CREATED);
     }
 
-    @PostMapping("/vendor/{id}/set-password")
+    @PostMapping("/vendors/{id}/set-password")
     public String addVendorUser(@PathVariable("id") Long id, @RequestBody Password password) {
         try {
             Vendor existingVendor = vendorService.getVendor(id);

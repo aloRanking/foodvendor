@@ -26,7 +26,7 @@ public class CustomerController {
     public ResponseEntity<Customer> createCustomer(@RequestBody final Customer customer){
         customerRepository.saveAndFlush(customer);
 
-        return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
+        return new ResponseEntity<>(customer, HttpStatus.CREATED);
     }
 
     @GetMapping( "/customers"  )
@@ -41,7 +41,7 @@ public class CustomerController {
     }
 
 
-    @PostMapping( "/customer/{id}/set-password")
+    @PostMapping( "/customers/{id}/set-password")
     public ResponseEntity addCustomerUser(@PathVariable("id") Long id, @RequestBody Password password) {
         try {
             Customer existingCustomer = customerService.getCustomer(id);
